@@ -3,7 +3,6 @@ const cors = require('cors')
 const CfdiToJson = require('cfdi-to-json');
 const fs = require('fs');
 const path = require('path');
-//const {save} = require('./db.js')
 let cfdi=[];
 let cfdiJson=[];
 let findId;
@@ -26,7 +25,6 @@ fs.readdir('./',  function (err, archivos) {
   cfdi.forEach(element => {
     cfdiJson.push(jsonCfdi = CfdiToJson.parse({ path: element }));
   })
-  //console.log(cfdiJson.length)
   findId = cfdiJson.filter(valor => valor.impuestos!==undefined )
   findId = findId.filter(valor =>valor.timbreFiscal!==undefined )
 });
@@ -36,11 +34,6 @@ app.get('/',  (request, response)=>{
   response.setHeader("Content-type", "text/plain");
   response.charset = "ANSI";
   findId.map((cfdi, index)=>{
-    // console.log(save(index))
-    // console.log(index)
-    // console.log(cfdi.emisor.rfc)
-    // console.log(cfdi.folio)
-    // console.log(cfdi.timbreFiscal.uuid)
     response.write(`${cfdi.version}|${cfdi.serie}|${cfdi.folio}|${cfdi.fecha}|${cfdi.formaPago}|${cfdi.subTotal}|${cfdi.descuento}|${cfdi.tipoCambio}|${cfdi.moneda}|${cfdi.total}|${cfdi.tipoDeComprobante}|${cfdi.metodoPago}|${cfdi.emisor.rfc}|${cfdi.emisor.nombre}|${cfdi.emisor.regimenFiscal}|${cfdi.receptor.rfc}|${cfdi.receptor.nombre}||||||||||||Ident Folio|${cfdi.timbreFiscal.uuid}|${cfdi.timbreFiscal.uuid}.xml|S - Comprobante obtenido satisfactoriamente. |Vigente|
 ${cfdi.conceptos.map((element, index) => {
   return `${cfdi.version}|${cfdi.serie}|${cfdi.folio}|${cfdi.fecha}|${cfdi.formaPago}|${cfdi.subTotal}|${cfdi.descuento}|${cfdi.tipoCambio}|${cfdi.moneda}|${cfdi.total}|${cfdi.tipoDeComprobante}|${cfdi.metodoPago}|${cfdi.emisor.rfc}|${cfdi.emisor.nombre}|${cfdi.emisor.regimenFiscal}|${cfdi.receptor.rfc}|${cfdi.receptor.nombre}|${cfdi.conceptos[index].cantidad}|${cfdi.conceptos[index].claveUnidad}|${cfdi.conceptos[index].claveProdServ}|${cfdi.conceptos[index].descripcion.replace(/\s+/g, ' ')}|${cfdi.conceptos[index].valorUnitario}|${cfdi.conceptos[index].importe}|||||||||||`}).join('\n')}
@@ -53,8 +46,6 @@ ${cfdi.version}|${cfdi.serie}|${cfdi.folio}|${cfdi.fecha}|${cfdi.formaPago}|${cf
 
 app.get('/api/v1', (request, response)=>{
   response.send(findId)
-  //console.log(findId)
-  // module.exports = findId
 })
 
 const PORT = process.env.PORT || 3000;
