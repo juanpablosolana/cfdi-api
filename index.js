@@ -18,8 +18,10 @@ fs.readdir('./',  function (err, archivos) {
   }
 
   archivos.forEach(file => {
-    if (path.extname(file) == '.xml')
-      cfdi.push(file);
+    if (path.extname(file) == '.xml'){
+       let stats = fs.statSync(file);
+       stats.size>1000? cfdi.push(file): null
+    }
   })
 
   cfdi.forEach(element => {
